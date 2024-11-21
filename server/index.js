@@ -79,11 +79,12 @@ mongoose
   })
   .catch((err) => console.error('Error connecting to MongoDB:', err.message));
 
-  const allowedOrigins = process.env.NODE_ENV === 'production'
-  ? ['https://projet-english.vercel.app']
-  : ['http://localhost:3000']; // Adjust as needed
-app.use(cors({ origin: allowedOrigins, methods: ['POST', 'GET'], credentials: true }));
-
+  app.use(cors({
+    origin: ['https://projet-english.vercel.app'], // Vercel frontend domain
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true, // Allow credentials like cookies and Authorization headers
+  }));
 app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/quiz', quizRoutes);

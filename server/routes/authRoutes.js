@@ -36,7 +36,7 @@ router.post('/login', async (req, res) => {
     if (!existingUser) return res.status(400).json({ message: 'User does not exist' });
 
     // Check password
-    const isMatch = await isexistedUser.matchPassword(password);
+    const isMatch = await bcrypt.compare(password, existingUser.password); // Corrected this line
     if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
     // Create JWT token
