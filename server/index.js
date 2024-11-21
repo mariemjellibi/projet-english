@@ -85,10 +85,13 @@ mongoose
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true, // Allow credentials like cookies and Authorization headers
   }));
+
 app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/quiz', quizRoutes);
-
+app.get("/",(req,res)=>{
+  res.json("hello");
+})
 const PORT = process.env.PORT || 5075;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
