@@ -79,13 +79,11 @@ mongoose
   })
   .catch((err) => console.error('Error connecting to MongoDB:', err.message));
 
-app.use(cors(
-  {
-    origin:["https://quiz-puce-eight.vercel.app/"],
-    methods:["POST","GET"],
-    credentials:true
-  }
-));
+  const allowedOrigins = process.env.NODE_ENV === 'production'
+  ? ['https://projet-english.vercel.app']
+  : ['http://localhost:3000']; // Adjust as needed
+app.use(cors({ origin: allowedOrigins, methods: ['POST', 'GET'], credentials: true }));
+
 app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/quiz', quizRoutes);

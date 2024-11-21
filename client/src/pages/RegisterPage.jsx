@@ -9,6 +9,28 @@ const RegisterPage = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     // Make sure to use the correct API URL (Vercel's URL in this case)
+  //     const response = await axios.post('https://projet-english-1zmq.vercel.app/api/auth/register', {
+  //       email,
+  //       password,
+  //     });
+
+  //     // Check if the response contains a token
+  //     if (response.data.token) {
+  //       localStorage.setItem('token', response.data.token); // Store token in localStorage
+  //       navigate('/quiz'); // Redirect to the quiz page after successful registration
+  //     } else {
+  //       throw new Error('No token received.');
+  //     }
+  //   } catch (err) {
+  //     // Handle different error cases
+  //     const errorMessage = err.response?.data?.message || err.message || 'Failed to register. Please try again.';
+  //     setError(errorMessage);
+  //   }
+  // };
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -16,17 +38,19 @@ const RegisterPage = () => {
         email,
         password,
       });
-      // Store token in localStorage
-      localStorage.setItem('token', response.data.token);
-      // Redirect to quiz page after successful registration
-      navigate('/quiz');
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token);
+        navigate('/quiz');
+      } else {
+        throw new Error('No token received.');
+      }
     } catch (err) {
-      // Set error message based on server response
-      const errorMessage = err.response?.data?.message || 'Failed to register. Please try again.';
+      console.error('Error during registration:', err);
+      const errorMessage = err.response?.data?.message || err.message || 'Failed to register. Please try again.';
       setError(errorMessage);
     }
   };
-
+  
   return (
     <div
       className="flex justify-center items-center min-h-screen bg-no-repeat"
