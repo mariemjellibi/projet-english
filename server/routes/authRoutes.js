@@ -48,5 +48,8 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+router.get('/', (req, res) => {
+  res.send('Auth routes are working!');
+});
 
 export default router;

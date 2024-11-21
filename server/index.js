@@ -92,7 +92,7 @@ app.use('/api/quiz', quizRoutes);
 app.get("/",(req,res)=>{
   res.json("hello");
 })
-const PORT = process.env.PORT || 5075;
+const PORT = process.env.PORT || 505;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
