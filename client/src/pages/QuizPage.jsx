@@ -9,7 +9,6 @@ const QuizPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
@@ -18,8 +17,9 @@ const QuizPage = () => {
           navigate('/login');
           return;
         }
-
-        const response = await axios.get('http://localhost:5075/api/quiz/', {
+  
+        // Use the deployed backend URL
+        const response = await axios.get('https://projet-english-1zmq.vercel.app/api/quiz/', {
           headers: { Authorization: `Bearer ${token}` },
         });
         setQuestions(response.data);
@@ -29,38 +29,34 @@ const QuizPage = () => {
         setIsLoading(false);
       }
     };
-
+  
     fetchQuestions();
   }, [navigate]);
-
-  const handleAnswerChange = (questionId, selectedOption) => {
-    setAnswers((prevAnswers) => ({
-      ...prevAnswers,
-      [questionId]: selectedOption,
-    }));
-  };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     const answersArray = Object.keys(answers).map((questionId) => ({
       questionId,
       selectedAnswer: answers[questionId],
     }));
-
+  
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post('http://localhost:5075/api/quiz/submit', {
-        answers: answersArray,
-      }, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
+      const response = await axios.post(
+        'https://projet-english-1zmq.vercel.app/api/quiz/submit', // Updated backend URL
+        { answers: answersArray },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+  
       // Redirect to the result page with the score
-      navigate('/result', { state: { score: response.data.score, totalQuestions: questions.length } });
+      navigate('/result', {
+        state: { score: response.data.score, totalQuestions: questions.length },
+      });
     } catch (err) {
       setError('Failed to submit the quiz');
     }
   };
+  
 
   if (isLoading) {
     return <div className="text-center text-white">Loading...</div>;

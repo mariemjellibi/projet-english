@@ -1,4 +1,3 @@
-// src/pages/RegisterPage.js
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -13,22 +12,29 @@ const RegisterPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5075/api/auth/register', {
+      const response = await axios.post('https://projet-english-1zmq.vercel.app/api/auth/register', {
         email,
         password,
       });
-      localStorage.setItem('token', response.data.token); // Store token
-      navigate('/quiz'); // Redirect to quiz page
+      // Store token in localStorage
+      localStorage.setItem('token', response.data.token);
+      // Redirect to quiz page after successful registration
+      navigate('/quiz');
     } catch (err) {
-      setError('Failed to register. Please try again.');
+      // Set error message based on server response
+      const errorMessage = err.response?.data?.message || 'Failed to register. Please try again.';
+      setError(errorMessage);
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-no-repeat" style={{ backgroundImage: `url(${background})` }}>
+    <div
+      className="flex justify-center items-center min-h-screen bg-no-repeat"
+      style={{ backgroundImage: `url(${background})` }}
+    >
       <div className="p-6 rounded-lg shadow-lg w-full max-w-sm">
         <h2 className="text-2xl font-bold text-center mb-4 text-white">Register</h2>
-        {error && <p className="text-red-500 text-center ">{error}</p>}
+        {error && <p className="text-red-500 text-center">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="email"
